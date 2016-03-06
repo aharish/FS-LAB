@@ -1,20 +1,18 @@
 //============================================================================
 // Name        : lab2.cpp
-// Author      : 
+// Author      : sneha
 // Version     :
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : fixed length records (c++)
 //============================================================================
-
-#include<iostream>
+#include <iostream>
+#include<string>
 #include<fstream>
 #include<sstream>
-#include<string.h>
 using namespace std;
 class student
 {
-	string usn,name,branch,buffer;
-	string sem;
+	string usn,name,branch,sem,buffer;
 public:
 	void read();
 	void pack();
@@ -22,52 +20,56 @@ public:
 	void write();
 	int search(string);
 	void modify(string);
-	int del(string);
 };
 void student::read()
 {
-	cout<<"enter usn";
-	cin>>usn;
-	cout<<"Enter name";
+	cout<<"Enter the name"<<endl;
 	cin>>name;
-	cout<<"Enter branch";
+	cout<<"Enter the usn"<<endl;
+	cin>>usn;
+	cout<<"Enter the branch"<<endl;
 	cin>>branch;
-	cout<<"Enter semester";
+	cout<<"Enter the semester"<<endl;
 	cin>>sem;
 }
 void student::pack()
 {
 	string temp;
+	int i;
+	temp.erase();
+	buffer.erase();
+	temp+=usn+'|'+name+'|'+branch+'|'+sem;
+	for(i=temp.size();i<100;i++)
+		temp+='$';
+	buffer+=temp;
+	cout<<buffer<<endl;
+}
+void student::write()
+{
 	fstream f1;
-	temp=usn+'|'+name+'|'+branch+'|'+sem;
-	buffer=temp;
-	buffer.resize(100,'$');
-	// Do not hard code file names.
-	f1.open("datafile.txt",ios::out|ios::app);
-	f1<<buffer<<endl;
+	f1.open("Data.txt",ios::out|ios::app);
+	f1<<buffer;
+	f1<<endl;
 	f1.close();
 }
 int student::search(string key)
 {
 	fstream f1;
-	int pos,f=0;
-	f1.open("datafile.txt",ios::in);
+	int pos;
+	f1.open("Data.txt",ios::in);
 	while(!f1.eof())
 	{
 		getline(f1,buffer);
 		pos=f1.tellp();
 		unpack();
-		if(key==usn) {
-			cout<<"key found";
-			//f=1;
+		if(usn==key)
+		{
+			cout<<"found the record"<<endl;
 			f1.close();
 			return pos;
 		}
 
 	}
-
-	cout<<"key not found";
-	f1.close();
 	return 0;
 }
 void student::unpack()
@@ -77,12 +79,15 @@ void student::unpack()
 	while(buffer[i]!='|')
 		usn+=buffer[i++];
 	i++;
+	name.erase();
 	while(buffer[i]!='|')
 		name+=buffer[i++];
 	i++;
+	branch.erase();
 	while(buffer[i]!='|')
 		branch+=buffer[i++];
 	i++;
+	sem.erase();
 	while(buffer[i]!='$')
 		sem+=buffer[i++];
 	i++;
@@ -90,62 +95,79 @@ void student::unpack()
 void student::modify(string key)
 {
 	int ch,pos;
-	string temp;
-	fstream f1;
+	fstream fp1;
 	pos=search(key);
-	pos=pos-101;
-	cout<<"enter the feild to be modified";
-	cout<<"1.usn\n2.name\n3.branch\n4.sem\n";
+	cout    <<"1.USN"<<endl
+			<<"2.NAME"<<endl
+			<<"3.BRANCH"<<endl
+			<<"4.SEMESTER"<<endl;
+	cout<<"Enter your choice: ";
 	cin>>ch;
 	switch(ch)
 	{
 	case 1:
-		cout<<"enter the usn to be modified\n";
+		cout<<"Enter the USN : "<<endl;
 		cin>>usn;
 		break;
 	case 2:
-			cout<<"enter the name to be modified\n";
-			cin>>name;
-			break;
+		cout<<"Enter the name "<<endl;
+		getline(cin,name);
+		break;
 	case 3:
-			cout<<"enter the branch to be modified\n";
-			cin>>branch;
-			break;
+		cout<<"Enter the branch "<<endl;
+		getline(cin,branch);
+		break;
 	case 4:
-			cout<<"enter the sem to be modified\n";
-			cin>>sem;
-			break;
+		cout<<"Enter the sem"<<endl;
+		cin>>sem;
+		break;
 	}
-	temp.erase();
-	f1.open("data.txt");
-    	temp+=usn+'|'+name+'|'+branch+'|'+sem;
-	temp.resize(100,'$');
-	f1<<temp<<endl;
-	f1.close();
+	pack();
+	pos=pos-101;
+	fp1.open("Data.txt");
+	fp1.seekp(pos,ios::beg);
+	fp1<<buffer;
+
 }
+
+
+
 int main()
 {
-	int choice;
-	student s;
+	int choice,i;
 	string key;
+	student s;
 	while(1)
 	{
-		cout<< "1.insert  2.search 3.modify"<<endl;
-		cout<<"Enter your choice"<<endl;
+		cout    <<"1.INSERT"<<endl
+				<<"2.SEARCH"<<endl
+				<<"3.MODIFY"<<endl;
+		cout<<"Enter your choice";
 		cin>>choice;
 		switch(choice)
 		{
-		case 1:s.read();
-		s.pack();
-		break;
-		case 2:cout<<"Enter the key";
-		cin>>key;
-		s.search(key);
-		break;
-		case 3:cout<<"Enter the key";
-		cin>>key;
-		s.modify(key);
-		break;
+		case 1:
+			s.read();
+			s.pack();
+			s.write();
+			break;
+		case 2:
+
+			cout<<"Enter the key ; "<<endl;
+			cin>>key;
+			i= s.search(key);
+			if(i!=0)
+				cout<<"Found at "<<i-101;
+			else
+				cout<<"Not found";
+			break;
+		case 3:
+			cout<<"Enter key "<<endl;
+			cin>>key;
+			s.modify(key);
+			break;
+
+		default:return 0;
 		}
 	}
 	return 0;
