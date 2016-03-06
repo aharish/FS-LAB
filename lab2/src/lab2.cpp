@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : lab2.cpp
 // Author      : sneha
-// Version     :
+// Version     : C++
 // Copyright   : Your copyright notice
 // Description : fixed length records (c++)
 //============================================================================
