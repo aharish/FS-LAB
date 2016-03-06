@@ -54,6 +54,7 @@ int student::search(string key)
 {
 	fstream f1;
 	int pos;
+	buffer.erase();
 	f1.open("Data.txt",ios::in);
 	while(!f1.eof())
 	{
@@ -94,7 +95,6 @@ void student::modify(string key)
 {
 	int ch,pos;
 	fstream f1;
-	buffer.erase();
 	pos=search(key);
 	if(pos<1)return;
 	cout<<"Record modified at position :"<<pos<<endl;
@@ -108,30 +108,26 @@ void student::modify(string key)
 		cout<<"Enter the USN : "<<endl;
 		cin>>usn;
 		cout<<endl;
-		pack();
 		break;
 	case 2:
 		cout<<"Enter the name "<<endl;
 		cin>>name;
 		cout<<endl;
-		pack();
 		break;
 	case 3:
 		cout<<"Enter the branch "<<endl;
 		cin>>branch;
 		cout<<endl;
-		pack();
 		break;
 	case 4:
 		cout<<"Enter the sem"<<endl;
 		cin>>sem;
-		pack();
 		break;
 	default:
 		cout<<"Enter a valid choice"<<endl;
 	}
-	//pack();
-	pos=pos-(buffer.size()-1);
+	pack();
+	pos=pos-(buffer.size()+1);
 	f1.open("Data.txt");
 	f1.seekp(pos,ios::beg);
 	f1<<buffer;
