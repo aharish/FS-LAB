@@ -87,40 +87,40 @@ void student::unpack()
 		sem+=buffer[i++];
 	i++;
 }
-void student:: modify(string key)
+void student::modify(string key)
 {
-	int pos,ch;
+	int ch,pos;
 	string temp;
 	fstream f1;
 	pos=search(key);
 	pos=pos-101;
-	cout<<"change 1.usn 2. name 3. br 4.sem \n";
+	cout<<"enter the feild to be modified";
+	cout<<"1.usn\n2.name\n3.branch\n4.sem\n";
 	cin>>ch;
 	switch(ch)
 	{
-	case 1:cout<<"usn";
-	cin>>usn;
-	break;
-	case 2:cout<<"name";
-	cin>>name;
-	break;
-	case 3:cout<<"branch";
-	cin>>branch;
-	break;
-	case 4:cout<<"semester";
-	cin>>sem;
-	break;
-	default: cout<<"wrong choice";
-	break;
+	case 1:
+		cout<<"enter the usn to be modified\n";
+		cin>>usn;
+		break;
+	case 2:
+			cout<<"enter the name to be modified\n";
+			cin>>name;
+			break;
+	case 3:
+			cout<<"enter the branch to be modified\n";
+			cin>>branch;
+			break;
+	case 4:
+			cout<<"enter the sem to be modified\n";
+			cin>>sem;
+			break;
 	}
-	buffer.erase();
 	temp.erase();
-	temp=usn+'|'+name+'|'+branch+'|'+sem;
-	buffer=temp;
-	buffer.resize(100,'$');
-	f1.open("datafile.txt");
-	f1.seekp(pos,ios::beg);
-	f1<<buffer<<endl;
+	f1.open("data.txt");
+    	temp+=usn+'|'+name+'|'+branch+'|'+sem;
+	temp.resize(100,'$');
+	f1<<temp<<endl;
 	f1.close();
 }
 int main()
