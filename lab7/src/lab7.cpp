@@ -1,9 +1,9 @@
 //============================================================================
 // Name        : coseq.cpp
 // Author      : sneha
-// Version     : c++
+// Version     : C++
 // Copyright   : Your copyright notice
-// Description : cosequential matching of strings in files
+// Description : cosequential matching using files
 //============================================================================
 #include <iostream>
 #include <fstream>
@@ -88,6 +88,8 @@ void coseq::sort()
 	int i;
 	sorting(a,count1);
 	cout<<"\nThe Sorted Contents of List 1 : \n";
+	for(i=0;i<=count1;i++)
+			cout<<a[i]<<"\n";
 	sorting(b,count2);
 	cout<<"\nThe Sorted Contents of List 2 : \n";
 	for(i=0;i<=count2;i++)
