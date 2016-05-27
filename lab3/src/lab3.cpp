@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : lab3.cpp
 // Author      : sneha
-// Version     :
+// Version     : c++
 // Copyright   : Your copyright notice
 // Description : Variable length records
 //============================================================================
@@ -59,17 +59,18 @@ int student::search(string key)
 	while(!f1.eof())
 	{
 		getline(f1,buffer);
-		pos=f1.tellp();
+		pos=f1.tellg();
+		pos=pos-buffer.size()-1;
 		unpack();
 		if(usn==key)
 		{
 			cout<<"found the record"<<endl;
-			f1.close();
-			return pos;
+			cout<<"Record found at position"<<pos;
 		}
+		else
+			cout<<"Record not found"<<endl;
 
 	}
-	return 0;
 }
 void student::unpack()
 {
@@ -157,11 +158,7 @@ int main()
 
 			cout<<"Enter the key ; "<<endl;
 			cin>>key;
-			i= s.search(key);
-			if(i!=0)
-				cout<<"Found at "<<i-101;
-			else
-				cout<<"Not found";
+			s.search(key);
 			break;
 		case 3:
 			cout<<"Enter key "<<endl;
