@@ -1,115 +1,100 @@
 //============================================================================
 // Name        : lab8.cpp
-// Author      : 
-// Version     :
+// Author      : Sneha
+// Version     : C++
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : Merge Sort for files
 //============================================================================
-#include <iostream>
-#include <cstring>
-#include <fstream>
+#include<iostream>
+#include<fstream>
+#include<stdlib.h>
 #include<vector>
+#include<string>
+#include<sys/types.h>
 using namespace std;
-class mergep
+string merge(vector<string>fnames,int left,int right)
 {
-	char list[20][80];
-	//vector <char[][]> list[][];
-	int n;
-	public:
-	void merger();
-	void input(char filename[]);
-};
-void mergep::merger()
-{
-	int i,j,k,m;
-	//vector <char[][]> merge[][];
-	//vector <char[][]> output[][];
-	char merge[80][20];
-	char output[100][20];
-	i=0;j=0;k=0;m=0;
-	while(i<n && j<m)
+	string s1,s2,s3;
+	if(left==right)
 	{
-		if(strcmp(list[i],merge[j])<0 || strcmp(list[i],merge[j])==0)
-			strcpy(output[k++],list[i++]);
-		else
-			strcpy(output[k++],merge[j++]);
+		return fnames[left];
 	}
-	while(i<n)
-		strcpy(output[k++],list[i++]);
-	while(j<m)
-		strcpy(output[k++],merge[j++]);
-	i=0;
-	while(i<k)
+	if ((right-left)==1)
 	{
-		strcpy(merge[i],output[i]);
-		i++;
+		ifstream if1(fnames[left].c_str());
+		ifstream if2(fnames[right].c_str());
+		string newfile=fnames[left]+"a";
+		ofstream of(newfile.c_str());
+		getline(if1,s1);
+		getline(if2,s2);
+		while(!if1.eof() && !if2.eof())
+		{
+			if(s1==s2)
+			{
+				if(s1!="")
+					of<<s1<<endl;
+				getline(if1,s1);
+				getline(if2,s2);
+			}
+			else if(s1<s2)
+			{
+				if(s1!="")
+					of<<s1<<endl;
+				getline(if1,s1);
+			}
+			else if(s2<s1)
+			{
+				if(s2!="")
+					of<<s2<<endl;
+				getline(if2,s2);
+			}
+		}
+		while(!if1.eof())
+		{
+			if(s1!="")
+				of<<s1<<endl;
+			getline(if1,s1);
+		}
+		while(!if2.eof())
+		{
+			if(s2!="")
+				of<<s2<<endl;
+			getline(if2,s2);
+
+		}
+		if1.close();
+		if2.close();
+		of.close();
+		return newfile;
+
 	}
-	m=k;
-}
-void mergep::input(char filename[])
-{
-	int i=0;
-	fstream out;
-	out.open(filename,ios::out);
-	cout<<"Enter the no of names:";
-	cin>>n;
-	cout<<"Enter the names in ascending order:\n";
-	while(i<n)
+	else
 	{
-		cin>>list[i];
-		out<<list[i++];
-		out<<'\n';
+		int mid=(left+right)/2;
+		string f1,f2;
+		f1=merge(fnames,left,mid);
+		f2=merge(fnames,mid+1,right);
+		vector<string>op;
+		op.push_back(f1);
+		op.push_back(f2);
+		return merge(op,0,1);
 	}
-	out.close();
+
 }
 int main()
 {
-	int i=0,m=0;
-	mergep s;
-	char merge[80][20];
-	char filename[30];
-	fstream file;
-	file.open("output.txt",ios::out);
-	cout<<"Enter name of the first file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Enter name of the second file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Enter name of the third file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Enter name of the fourth file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Enter name of the fifth file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Enter name of the sixth file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Enter name of the seventh file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Enter name of the eigth file:";
-	cin>>filename;
-	s.input(filename);
-	s.merger();
-	cout<<"Merged output:"<<endl;
-	while(i<m)
-	{
-		file<<merge[i];
-		cout<<merge[i]<<endl;
-		file<<'\n';
-		i++;
-	}
-	file.close();
+	vector <string> v;
+	v.push_back("f0.txt");
+	v.push_back("f1.txt");
+	v.push_back("f2.txt");
+	v.push_back("f3.txt");
+	v.push_back("f4.txt");
+	v.push_back("f5.txt");
+	v.push_back("f6.txt");
+	v.push_back("f7.txt");
+	cout<<"Resulting file is ";
+	cout<<merge(v,0,7)<<endl;
+	return 0;
 }
+
 
