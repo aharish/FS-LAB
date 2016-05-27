@@ -16,22 +16,17 @@ class student
 	string usn,name,branch,sem,buffer;
 public:
 	void read_data();
-	void display_data();
 	void pack();
+	void search_rrn();
+	void search();
 	void unpack(int);
-}s;
+};
 int rrn[100],count = 0;
 fstream fp;
-void find_rrn();
-void search();
-void error(int);
-void find_rrn()
+void student::search_rrn()
 {
 	int pos;
-	string buffer;
-	fp.open("data.txt",ios::in);
-	if(!fp)
-		error(1);
+	fp.open("data.txt",ios::in);;
 	while(fp)
 	{
 		pos = fp.tellg();
@@ -68,45 +63,26 @@ void student::unpack(int pos)
 	getline(fp, branch, '|');
 	getline(fp, sem, '|');
 }
-void student::display_data()
-{
-	cout<<"\nName: "<<name<<"\nusn: "<<usn<<"\nbranch: "<<branch<<"\nsem: "<<sem<<endl;
-}
-void search()
+void student::search()
 {
 	int rrn_srch, pos;
 	cout<<"Enter the RRN of the record to be found:\n";
 	cin>>rrn_srch;
 	if(rrn_srch>count||rrn_srch<1)
-	{	error(2);
 	return;
-	}
 	cout<<"Record Found:\n";
 	pos=rrn[rrn_srch];
 	cout<<pos;
 	fp.open("data.txt", ios::in);
-	if(!fp)
-		error(1);
-	s.unpack(pos);
+	unpack(pos);
 	fp.close();
-	s.display_data();
-}
-void error(int error)
-{
-	switch(error)
-	{
-	case 1: cout<<"Unable to open the record File\n";
-	exit(0);
-	case 2:	cout<<"Invalid RRN\n";
-	return;
-	}
+	cout<<"\nName: "<<name<<"\nusn: "<<usn<<"\nbranch: "<<branch<<"\nsem: "<<sem<<endl;
 }
 int main()
 {
 	int choice;
-	fp.open("data.txt",ios::out|ios::app);
-	fp.close();
-	find_rrn();
+	student s;
+	s.search_rrn();
 	while(1)
 	{
 		cout<<"1. Insert a record\n2. Search for record using RRN\n3. Exit\nEnter Choice : ";
@@ -116,13 +92,11 @@ int main()
 		case 1:
 			s.read_data();
 			fp.open("data.txt",ios::out|ios::app);
-			if(!fp)
-				error(1);
 			s.pack();
 			fp.close();
 			break;
 		case 2:
-			search();
+			s.search();
 			break;
 		default: exit(0);
 		}
