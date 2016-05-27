@@ -111,11 +111,11 @@ void student::modify(string key)
 		break;
 	case 2:
 		cout<<"Enter the name "<<endl;
-		getline(cin,name);
+		cin>>name;
 		break;
 	case 3:
 		cout<<"Enter the branch "<<endl;
-		getline(cin,branch);
+		cin>>branch;
 		break;
 	case 4:
 		cout<<"Enter the sem"<<endl;
@@ -129,9 +129,6 @@ void student::modify(string key)
 	fp1<<buffer;
 
 }
-
-
-
 int main()
 {
 	int choice,i;
